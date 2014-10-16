@@ -1,0 +1,48 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
+           i18n_domain="iwlearn.mediagallery">
+
+    <include package=".portlets" />
+
+    <browser:jbot directory="jbot_templates" />
+
+    <!-- resourceDirectory containing images for video navigation from thickbox -->
+    <browser:resourceDirectory name="video-slider-images"
+                               directory="images"
+                               permission="zope.Public" />
+
+    <!--browser:page name="gallery_highlights"
+            for="*"
+            class=".gallery.Mediagallery"
+            permission="zope2.View"
+            allowed_attributes="getVideos getPhotos"
+        /-->
+
+
+    <browser:page name="video_popup_view"
+                  template="image_popup_view.pt"
+                  for="Products.ATContentTypes.interface.IATImage"
+                  permission="zope2.View" />
+
+    <browser:page name="video_popup_view"
+                  template="multimedia_popup_view.pt"
+                  class="iwlearn.mediagallery.browser.video.VideoView"
+                  for="Products.ATContentTypes.interface.IATLink"
+                  permission="zope2.View" />
+
+    <!-- views providing related objects -->
+
+    <browser:page
+        for="*"
+        name="auto_related"
+        class=".related.AutoRelated"
+        allowed_interface=".interfaces.IAutoRelated"
+        permission="zope.Public"
+        />
+
+
+
+
+
+</configure>

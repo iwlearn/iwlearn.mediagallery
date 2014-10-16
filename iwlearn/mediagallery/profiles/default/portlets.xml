@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<portlets>
+
+    <!-- Portlet type registrations -->
+    <portlet
+        addview="iwlearn.mediagallery"
+        title="IWLearn media gallery"
+        description="A portlet displyaing a media gallery (images and videos)."
+    />
+
+</portlets>

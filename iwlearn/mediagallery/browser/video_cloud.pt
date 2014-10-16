@@ -1,0 +1,21 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+ xmlns:tal="http://xml.zope.org/namespaces/tal"
+ xmlns:metal="http://xml.zope.org/namespaces/metal"
+ xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+ lang="en" metal:use-macro="context/main_template/macros/master"
+ i18n:domain="plone">
+ <body>
+  <metal:content-core fill-slot="content-core" 
+  tal:define="video_info context/@@video_cloud_view;">
+   <metal:content-core define-macro="content-core">
+   <metal:video_players define-macro="video_players">
+        <metal:video_player use-macro="context/iwlearn_multimedia_macros/macros/video_players" />
+    </metal:video_players>
+    <p>&nbsp;</p>
+    <metal:field use-macro="python:context.widget('text', mode='view')">
+         Body text
+    </metal:field>
+   </metal:content-core>
+  </metal:content-core>
+ </body>
+</html>

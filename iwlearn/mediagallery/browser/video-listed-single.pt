@@ -1,0 +1,38 @@
+<metal:block metal:define-macro="listed_video" 
+     i18n:domain="iwlearn.mediagallery">
+          <div class="media-item"
+               tal:define="videoobj videoobj|options/videoobj|nothing;
+                           video video|options/video|videoobj;
+                           viewurl string:${video/url};
+                           oddeven oddeven|video/oddeven|string:;
+                           portal_url context/@@plone_portal_state/portal_url;
+                           portal_type video/portal_type"
+               tal:attributes="class string:media-item $oddeven portal_type_$portal_type">
+            <div class="item-left">
+              <dl>
+                <dt class="album-art" i18n:translate="">Album Art:</dt>
+                <dd class="album-art">
+                  <a href="" tal:attributes="href string:$viewurl"
+                    ><img tal:attributes="src video/image_url"
+                       alt="Video Album Art"
+                       i18n:attributes="alt" /></a>
+                </dd>
+              </dl>
+              <div class="visualClear"><!-- --></div>
+            </div>
+            <div class="item-content">
+              <h2 class="item-title">
+                <a tal:content="video/title"
+                   tal:attributes="href viewurl">Video Title</a>
+              </h2>
+
+              <p class="item-description">
+                <span tal:replace="video/description"></span>
+                &nbsp;&nbsp;<a href=""
+                               tal:attributes="href viewurl" i18n:translate="">More</a>
+              </p>
+
+        </div>
+        <div class="visualClear"><!-- --></div>
+      </div>
+</metal:block>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<object name="portal_skins">
+
+ <object name="iwlearn_mediagallery_js" meta_type="Filesystem Directory View"
+     directory="iwlearn.mediagallery:skins/iwlearn_mediagallery_js"/>
+
+  <object name="iwlearn_mediagallery_styles" meta_type="Filesystem Directory View"
+      directory="iwlearn.mediagallery:skins/iwlearn_mediagallery_styles" />
+
+  <object name="iwlearn_mediagallery_templates" meta_type="Filesystem Directory View"
+      directory="iwlearn.mediagallery:skins/iwlearn_mediagallery_templates" />
+
+  <object name="iwlearn_mediagallery_images" meta_type="Filesystem Directory View"
+      directory="iwlearn.mediagallery:skins/iwlearn_mediagallery_images" />
+
+ <skin-path name="*">
+  <layer name="iwlearn_mediagallery_images" insert-after="custom" />
+  <layer name="iwlearn_mediagallery_templates" insert-after="iwlearn_mediagallery_images" />
+  <layer name="iwlearn_mediagallery_styles" insert-after="iwlearn_mediagallery_templates"/>
+  <layer name="iwlearn_mediagallery_js" insert-after="iwlearn_mediagallery_styles"/>
+ </skin-path>
+
+</object>

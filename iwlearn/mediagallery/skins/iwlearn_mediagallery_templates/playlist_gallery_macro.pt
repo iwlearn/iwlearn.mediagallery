@@ -1,0 +1,33 @@
+<tal:playlist metal:define-macro="playlist"
+     tal:define="hide_listing python: True;
+                 hide_album python: False;
+                 more_href string:playlist;
+                 playlist nocall:context/@@video_playlist_view/playlist;
+                 frontpageProperties context/portal_properties/frontpage_properties;
+                 youtube frontpageProperties/youtubePlaylists|nothing;
+                 items python:playlist(youtube) if youtube else playlist('5A7072A58A14ED00' ,'CA768A2FDBA259DE');">
+        <div class="gallery-album">
+            <tal:items tal:repeat="item items" >
+            <tal:item tal:define="playlist_title python:item[0]; vid_ids python:item[1]; 
+            vid_titles python: item[2]; vid_descriptions python: item[3]">
+
+        <div class="visualClear"></div>
+        <h3 tal:content="playlist_title">An introduction to the EEA (8)</h3>                   
+            <tal:multimedia metal:define-macro="playlists">                         
+
+        <tal:vids tal:repeat="video_id vid_ids">
+            <div class="photoAlbumEntry" tal:define="numb repeat/video_id/number; video_title python:vid_titles[numb - 1]">
+                <a  tal:attributes="href string:http://www.youtube.com/embed/${video_id}?autoplay=1; title video_title" class="video-fancybox">
+                  <span class="photoAlbumEntryWrapper">
+                      <img  tal:attributes="src string:http://i3.ytimg.com/vi/${video_id}/default.jpg; alt video_title; title video_title;" />
+                  </span>
+                  <span class="photoAlbumEntryTitle" tal:content="video_title">Green tip - the log</span>
+                  <span class="photoAlbumEntryDescription" tal:content="python:vid_descriptions[numb - 1]"></span>
+                </a>
+             </div>
+        </tal:vids>
+        </tal:multimedia>
+        </tal:item>
+    </tal:items>
+        </div>
+</tal:playlist>

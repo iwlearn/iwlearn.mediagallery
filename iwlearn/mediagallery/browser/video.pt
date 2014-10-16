@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="iwlearn.mediagallery">
+
+      <head> 
+      
+      </head>  
+<body>
+
+
+<div metal:fill-slot="content-core"
+     tal:define="video_info nocall:view;
+                 context_url string:${context/absolute_url};
+                 mime_type context/content_type;">
+    <tal:main-macro metal:define-macro="main">
+
+        <div id="objmetadata_pbwidgets_wrapper">
+                   
+        <metal:video_players define-macro="video_players">
+            <metal:video_player use-macro="context/iwlearn_multimedia_macros/macros/video_players" />
+            <tal:co tal:condition="not:video_info/cloud_url">
+                <div tal:replace="structure video_info/media_player"></div>
+            </tal:co>
+        </metal:video_players>
+            <!-- Display metadata about the video -->
+            <div>
+              <dl class="media-single-item">
+                <tal:time condition="video_info/duration">
+                    <dt i18n:translate="">Time:</dt>
+                    <dd tal:content="video_info/duration">8:30</dd>
+                </tal:time>
+                <tal:author condition="video_info/author">
+                    <dt i18n:translate="">Author:</dt>
+                    <dd tal:content="video_info/author">Author</dd>
+                </tal:author>
+                <tal:publish_date condition="video_info/published_date">
+                    <dt i18n:translate="">Published:</dt>
+                    <dd tal:content="video_info/published_date">Date</dd>
+                </tal:publish_date>
+              </dl>
+              <div>&nbsp;</div>
+            </div>
+        </div>
+
+        <div tal:content="structure video_info/rich_description"
+             tal:condition="video_info/rich_description"
+             class="richDocumentDescription">
+            Description
+        </div>
+
+        <div class="visualClear">&nbsp;</div>
+
+    </tal:main-macro>
+    <!-- Mark this view as being a main view template /-->
+    <tal:block tal:define="global isViewTemplate python:True"/>
+</div>
+</body>
+
+</html>

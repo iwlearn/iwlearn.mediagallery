@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+ <javascript id="design.js"/>
+
+ <javascript id="whatsnew_gallery.js"/>
+
+ <javascript id="sub_cookies.js"/>
+
+ <javascript id="attachevent.js"/>
+
+ <javascript id="drop.js"/>
+
+ <javascript id="iwlearn-fancybox.js"/>
+
+ <javascript id="related_gallery.js"/>
+
+ <javascript id="related_slider_gallery.js"/>
+
+ <javascript cacheable="True"
+             compression="safe"
+             cookable="True"
+             enabled="True"
+             expression=""
+             id="iwlearn-mediacentre.js"
+             inline="False"
+             position-after="iwlearn-fancybox.js"/>
+
+ <javascript cacheable="True"
+             compression="safe"
+             cookable="True"
+             enabled="True"
+             expression="python:'multimedia_view' in context.getLayout()"
+             id="iwlearn.multimedia.js"
+             inline="False"
+             position-after="iwlearn-mediacentre.js"/>
+
+    <javascript
+                id="iwlearn-tabs.js"
+                position-after="iwlearn-fullscreen.js"/>
+
+    <javascript
+                id="pagination.js"
+                position-after="iwlearn-tabs.js"/>
+
+    <javascript
+                id="iwlearn-pagination.js"
+                position-after="pagination.js"/>
+
+    <javascript
+                id="outdated_browser.js"
+                position-after="iwlearn-pagination.js"/>
+
+    <javascript
+            id="iwlearn-fitcontainer.js"
+            insert-after="outdated_browser.js"
+            />
+
+</object>

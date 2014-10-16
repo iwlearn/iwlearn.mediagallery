@@ -1,0 +1,44 @@
+<configure xmlns="http://namespaces.zope.org/browser"
+           i18n_domain="iwlearn.mediagallery">
+
+    <resourceDirectory
+            name="flowplayer"
+            directory="flowplayer"
+            permission="zope.Public"
+            />
+
+    <resourceDirectory
+            name="flowplayer-html"
+            directory="flowplayer/html"
+            permission="zope.Public"
+            />
+
+    <page for="*"
+          name="viewimage"
+          permission="zope2.View"
+          class=".fileimage.ViewImage" />
+
+    <!-- p4a creates the template inside the view class, so we must make
+         a subclass and create our own template so we can use our own. -->
+
+    <page name="video_listed_single"
+          for="*"
+          class=".single.VideoListedSingle"
+          allowed_interface="iwlearn.mediagallery.browser.single.IListedSingle"
+          permission="zope2.View" />
+
+    <!-- we want related multimedia/pages portlets when watching video,
+         so we override video.pt and put the portlets in there. -->
+
+    <page name="file_view"
+          template="video_cloud.pt"
+          for="Products.ATContentTypes.interfaces.link.IATLink"
+          class="iwlearn.mediagallery.browser.video.CloudVideoView"
+          permission="zope2.View" />
+
+
+    <page name="video_cloud_view"
+          class=".video.CloudVideoView"
+          for="Products.ATContentTypes.interfaces.link.IATLink"
+          permission="zope2.View" />
+</configure>

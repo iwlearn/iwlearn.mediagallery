@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      i18n:domain="iwlearn.mediagallery">
+
+<body>
+
+<dd metal:define-macro="embedded-media" class="portletItem embeddedMedia"
+    tal:define="imgsize imgsize|string:image_thumb;
+                imgurl media/item_thumbnail"
+    tal:condition="imgurl">
+    <a class="tileImage video-fancybox" tal:attributes="href media/url; title media/title">
+       <img tal:attributes="src imgurl; title media/title; alt media/title"/>
+    </a>
+</dd>
+
+<dd metal:define-macro="embedded-photo" class="portletItem embeddedMedia"
+    tal:define="imgsize imgsize|string:image_thumb;
+                imgurl media/url"
+    tal:condition="imgurl">
+    <a class="tileImage video-fancybox" tal:attributes="href media/url; title media/title">
+       <img tal:attributes="src python:imgurl +'/image_thumb'"/>
+    </a>
+</dd>
+
+<metal:macro metal:define-macro="auto-context">
+<tal:auto
+    tal:define="nr_items nr_items|python:4;
+                fill_limit fill_limit|python:0;
+                imgsize imgsize|string:image_thumb;
+                autorel nocall:context/@@auto_related;
+                portal_type portal_type|context/portal_type;
+                item_id context/id;   
+                items python:autorel.autoContext(portal_type, fill_limit, item_id)"
+    tal:condition="items"
+    i18n:domain="iwlearn.mediagallery">
+    <dl class="portlet auto-related">
+        <dt class="portletHeader" i18n:translate="">Related</dt>
+        <dd class="portletItem">
+            <dl>
+                <tal:block repeat="info python:items[:nr_items]">
+                    <tal:media define="media info"
+                        condition="python:info['item_type']== 'Image'">
+                            <metal:embedded use-macro="here/document_relateditems/macros/embedded-photo" />
+                    </tal:media>
+                    <tal:media define="media info"
+                        condition="python:info['item_type']== 'Link'">
+                            <metal:embedded use-macro="here/document_relateditems/macros/embedded-media" />
+                    </tal:media>
+                </tal:block>
+            </dl>
+        </dd>
+    <div class="visualClear"></div>
+    </dl>
+</tal:auto>
+</metal:macro>
+
+          <tal:entries repeat="brain batch">
+            <tal:entry
+              define="doc brain/getObject|nothing"
+              condition="exists:doc/@@faceted-preview-item"
+              replace="structure doc/@@faceted-preview-item" />
+          </tal:entries>
+
+
+</body>
+</html>
+

@@ -1,0 +1,131 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="iwlearn.mediagallery" tal:omit-tag="">
+
+<div metal:define-macro="photos"
+     id="photo-highlights"
+     class="iwlearn-tabs-panel">
+
+</div>
+
+
+
+<div metal:define-macro="videos"
+     class="iwlearn-tabs-panel"
+     id="multimedia-highlights"
+     tal:define="hide_album python: False;
+                 hide_listing python: True;
+                 more_href string:videos;">
+        <div metal:use-macro="here/frontpage_macros/macros/gallery-empty" />
+</div>
+
+<div metal:define-macro="allproducts"
+     class="iwlearn-tabs-panel"
+     id="allproducts-highlights"
+     tal:define="hide_album python: False;
+                 hide_listing python: True;">
+        <div metal:use-macro="here/frontpage_macros/macros/gallery-empty" />
+</div>
+
+<div metal:define-macro="more-link" class="portletFooter"
+    tal:define="more_href more_href|string:/;
+                more_title more_title|string:All Items">
+                <p>
+		   <a title="archive" class="standardButton" i18n:attributes="title" 
+                       tal:attributes="href more_href;" >
+				<span i18n:translate=""
+                                      tal:omit-tag="">
+                                    <tal:block tal:content="more_title">All Items</tal:block></span>
+                    </a>
+                </p>
+</div>
+
+<metal:gallery-items define-macro="gallery-items"
+                     tal:define="visible_album python: 'hiddenStructure' if hide_album else '';
+                                 visible_listing python: 'hiddenStructure' if hide_listing else '';">
+        <div class="gallery-ajax visualClear">
+            <div tal:attributes="class string: gallery-listing ${visible_listing}">
+                <div metal:use-macro="here/folder_summary_view/macros/listing"></div>
+            </div>
+            <tal:enabled tal:define="enabled python: True">
+                <div tal:attributes="class string: gallery-album ${visible_album}">
+                    <div metal:use-macro="here/atct_album_view/macros/listing-nobatch"></div>
+                </div>
+            </tal:enabled>
+        </div>
+</metal:gallery-items>
+
+<metal:ajax-items define-macro="ajax-items">
+            <div class="gallery-listing">
+                <div metal:use-macro="here/folder_summary_view/macros/listing"></div>
+            </div>
+            <div class="gallery-album">
+                <tal:enabled tal:define="enabled python: True">
+                    <div metal:use-macro="here/atct_album_view/macros/listing-nobatch"></div>
+                </tal:enabled>
+            </div>
+</metal:ajax-items>
+
+<metal:gallery-layout-selection metal:define-macro="gallery-layout-selection">
+     <p class="filter-topic"></p>
+     <ul class="gallery-layout-selection"
+         tal:define="active_list python:' active-list' if not hide_listing else '';
+                     active_album python:' active-album' if not hide_album else '';">
+            <li><a href="#" tal:attributes="class string:list-layout${active_list}"></a></li>
+            <li><a href="#" tal:attributes="class string:album-layout${active_album}"></a></li>
+        </ul>
+        <div metal:use-macro="here/frontpage_macros/macros/gallery-items" />
+        <div metal:use-macro="here/frontpage_macros/macros/more-link" />
+</metal:gallery-layout-selection>
+
+<metal:condition metal:define-macro="gallery-condition">
+    <tal:cond tal:condition="folderContents"
+        tal:define="ajax ajax|nothing;
+        limit_display limit_display|nothing;
+        foldermacro python:context.frontpage_macros.macros['ajax-items'] if ajax else context.frontpage_macros.macros['gallery-layout-selection'];">
+        <div metal:use-macro="foldermacro" />
+    </tal:cond>
+    <tal:nocond tal:condition="not:folderContents">
+    <div style="display:none" tal:content="string:plone: XXX this is a workaround, somehow the first div from this folder gets it's content removed"></div>
+        <div class='portalMessage informationMessage'>
+            <p i18n:translate="" class='js-no-results'>No results are available for this topic</p>
+        </div>
+    </tal:nocond>
+</metal:condition>
+
+<metal:empty metal:define-macro="gallery-empty" tal:define="more_title string:All items;">
+     <p class="filter-topic"></p>
+     <ul class="gallery-layout-selection"
+         tal:define="active_list python:' active-list' if not hide_listing else '';
+                     active_album python:' active-album' if not hide_album else '';">
+            <li><a href="#" tal:attributes="class string:list-layout${active_list}"></a></li>
+            <li><a href="#" tal:attributes="class string:album-layout${active_album}"></a></li>
+        </ul>
+    <div class="gallery-ajax visualClear">
+        <div class="gallery-listing">
+        </div>
+        <div class="gallery-album">
+        </div>
+    </div>
+    <div metal:use-macro="here/frontpage_macros/macros/more-link" />
+</metal:empty>
+
+<metal:isVideo metal:define-macro="is-video">
+    <tal:comment replace="nothing">
+        You should provide portal_type and is_video before calling this macro
+        to avoid getting wrong results.
+    </tal:comment>
+
+    <tal:defines tal:define="
+    portal_type portal_type|context/portal_type;
+    item_interfaces context/@@plone_interface_info;
+    is_video is_video|python:item_interfaces.provides('eea.mediacentre.interfaces.IVideo');
+
+    video python:'video-fancybox' if is_video and portal_type != 'FlashFile' else '';
+    animation python:'animation-fancybox' if portal_type == 'FlashFile' else '';
+    cloud python:'video-fancybox cloudvideo' if portal_type == 'CloudVideo' else '';">
+        <span metal:define-slot="body"></span>
+    </tal:defines>
+</metal:isVideo>
+
+</html>

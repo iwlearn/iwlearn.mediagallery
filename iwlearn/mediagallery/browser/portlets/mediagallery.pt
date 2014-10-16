@@ -1,0 +1,373 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      tal:omit-tag="">
+<dl class="portlet portletMediagallery">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft">New in the gallery</span>
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem">
+        <!-- tabs -->
+ 	<div metal:define-macro="whatsnew-gallery" tal:attributes="id string:whatsnew-gallery;">
+                            <ul class="iwlearn-tabs two-rows"
+                                tal:define="tabnames  python: ['Photos', 'Videos'];">
+                                <li tal:repeat="tab tabnames">
+                                    <a href="#"  i18n:translate=""
+                                       tal:content="python:context.translate(tab, domain='iwlearn.mediagallery')" class="block"
+                                       tal:attributes="id python: 'tab-datamaps' if tab == 'Data and maps' else 'tab-' + tab.replace(' ', '').lower()">Tabs</a>
+                                </li>
+                            </ul>
+                            <!-- end_tabs -->
+
+<!--Photo highlights-->
+
+<div id="photo-highlights"
+     class="iwlearn-tabs-panel"
+     tal:define="hide_listing python: False;
+                 hide_album python: True;
+                 more_href string:media/photos;">
+     <!--div tal:define="more_title string:All items;"-->
+     <p class="filter-topic"></p>
+     <ul class="gallery-layout-selection"
+         tal:define="active_list python:' active-list' if not hide_listing else '';
+                     active_album python:' active-album' if not hide_album else '';">
+            <li><a href="#" tal:attributes="class string:list-layout${active_list}"></a></li>
+            <li><a href="#" tal:attributes="class string:album-layout${active_album}"></a></li>
+        </ul>
+    <div class="gallery-ajax visualClear">
+        <div tal:define="folderContents python:view.getResults(portal_type='Image');
+                                      plone_view nocall:plone_view|context/@@plone;
+                                      toLocalizedTime nocall: context/@@plone/toLocalizedTime;
+                                      ajax python:True">
+
+            <tal:folderContents condition="folderContents">
+            <div>
+                <tal:cond tal:condition="folderContents"
+                    tal:define="ajax ajax|nothing;
+                    limit_display limit_display|nothing;">
+                <div>
+                    <div class="gallery-album hiddenStructure" style="display: block;">
+                        <tal:enabled tal:define="enabled python: True">
+                            <div tal:define="
+                                folderContents folderContents|nothing;
+                                enabled enabled|nothing">
+                                <tal:folderContents condition="python: folderContents and enabled" tal:define="batch folderContents">
+                                    <tal:images tal:repeat="brain folderContents">
+                                        <tal:entry tal:define="
+                                            obj brain/getObject;
+                                            obj_title python:obj.pretty_title_or_id();
+                                            desc_or_title python:brain.Description or obj_title;">
+                                            <div tal:define="css python:obj.isPrincipiaFolderish and 'photoAlbumEntry photoAlbumFolder' or 'photoAlbumEntry';"
+                                                tal:attributes="class css">
+
+                                                <a tal:attributes="href obj/absolute_url;
+                                                                   title obj/pretty_title_or_id;
+                                                                   class python:'video-fancybox cloudvideo'">
+                                                    <span class="photoAlbumEntryWrapper">
+                                                        <img tal:attributes="title desc_or_title;
+                                                            alt obj/pretty_title_or_id;
+                                                            src string:${obj/absolute_url}/image_thumb"/>
+                                                    </span>
+                                                    <span class="photoAlbumEntryTitle" tal:content="obj/pretty_title_or_id" />
+                                                    <span class="photoAlbumEntryDescription" tal:content="python: obj.Description()" />
+                                                </a>
+                                            </div>
+                                        </tal:entry>
+                                </tal:images>
+                                <div class="visualClear"></div>
+                            </tal:folderContents>
+                        </div>
+                    </tal:enabled>
+                </div>
+
+        <div class="gallery-listing">
+
+                        <tal:enabled tal:define="enabled python: True">
+                            <div tal:define="
+                                folderContents folderContents|nothing;
+                                enabled enabled|nothing">
+                                <tal:folderContents condition="python: folderContents and enabled" tal:define="batch folderContents">
+                                    <tal:entry tal:repeat="item python:folderContents[0:len(folderContents)/2]">
+                        <tal:block
+                       tal:define="
+                                   item_object item/getObject;
+                                   item_absolute_url item_object/absolute_url;
+                                   item_title_or_id python:item.pretty_title_or_id(); 
+                                   item_description item/Description;
+                                   item_type item/portal_type;
+                                   item_type_title item/Type;
+                                   item_published item/EffectiveDate;
+                                   item_modified item/ModificationDate">
+               <div class="tileItem visualIEFloatFix">
+                    <a class="tileImage"
+                       tal:attributes="href item_absolute_url;
+                                       title item_title_or_id;
+                                       class python:'video-fancybox cloudvideo'">
+                        <img tal:attributes="src string:${item_absolute_url}/image_thumb;
+                                             title item_title_or_id;
+                                             alt item_title_or_id" />
+                    </a>
+
+                    <div class="tileContent">
+                        <h2 class="tileHeadline">
+                            <a href="#"
+                               class="summary url video-fancybox cloudvideo'"
+                               tal:attributes="href string:${item_absolute_url}/video_popup_view;
+                                title item_title_or_id"
+                               tal:content="item_title_or_id">
+                                Item Title
+                            </a>
+
+                        </h2>
+
+                        <span class="date"
+                              tal:condition="python:item_published != 'None'">
+                            <span tal:replace="python:toLocalizedTime(item_published)">
+                                August 16, 2001 at 23:35:59
+                            </span>
+                        </span>
+
+                    <p class="tileBody" tal:condition="item_description">
+                        <span class="description" tal:content="item_description">
+                            description
+                        </span>
+                    </p>
+
+                    <p class="tileFooter">
+                        <a href="" class="moreLink video-fancybox cloudvideo"
+                           tal:attributes="href string:${item_absolute_url}/video_popup_view"
+                           i18n:translate="">
+                        Zoom in
+                        </a>
+                    </p>
+                    <div class="visualClear" style="padding-bottom:1.0em;"><!-- --></div>
+
+                </div>
+
+                                 </tal:block>
+                                </tal:entry>
+                                <div class="visualClear"></div>
+                            </tal:folderContents>
+                        </div>
+                    </tal:enabled>
+
+        </div>
+<!--end of gallery listing-->
+
+            </div>
+    </tal:cond>
+    <tal:nocond tal:condition="not:folderContents">
+    <div style="display:none" tal:content="string:plone: XXX this is a workaround, somehow the first div from this folder gets it's content removed"></div>
+        <div class='portalMessage informationMessage'>
+            <p i18n:translate="" class='js-no-results'>No results are available for this topic</p>
+        </div>
+    </tal:nocond>
+</div>
+</tal:folderContents>
+
+
+        </div>
+    <div class="portletFooter"
+    tal:define="more_href more_href|string:/;
+                more_title more_title|string:Enter Gallery">
+                <p>
+		   <a title="archive" class="standardButton" i18n:attributes="title" 
+                       tal:attributes="href more_href;" >
+				<span i18n:translate=""
+                                      tal:omit-tag="">
+                                    <tal:block tal:content="more_title">Enter GAllery</tal:block></span>
+                    </a>
+                </p>
+</div>
+
+</div>
+    </div>
+<!--end of photo highlights -->
+
+
+<!--Video highlights-->
+
+<div id="video-highlights"
+     class="iwlearn-tabs-panel"
+     tal:define="hide_listing python: False;
+                 hide_album python: True;
+                 more_href string:media/videos;">
+     <!--div tal:define="more_title string:All items;"-->
+     <p class="filter-topic"></p>
+     <ul class="gallery-layout-selection"
+         tal:define="active_list python:' active-list' if not hide_listing else '';
+                     active_album python:' active-album' if not hide_album else '';">
+            <li><a href="#" tal:attributes="class string:list-layout${active_list}"></a></li>
+            <li><a href="#" tal:attributes="class string:album-layout${active_album}"></a></li>
+        </ul>
+    <div class="gallery-ajax visualClear">
+        <div tal:define="folderContents python:view.getResults(portal_type='Link');
+                                      plone_view nocall:plone_view|context/@@plone;
+                                      toLocalizedTime nocall: context/@@plone/toLocalizedTime;
+                                      ajax python:True">
+
+
+            <tal:folderContents condition="folderContents">
+                <!--div metal:use-macro="here/frontpage_macros/macros/gallery-condition" /-->
+            <div>
+                <tal:cond tal:condition="folderContents"
+                    tal:define="ajax ajax|nothing;
+                    limit_display limit_display|nothing;">
+                <div>
+                    <div class="gallery-album hiddenStructure" style="display: block;">
+                        <!--div metal:use-macro="here/folder_summary_view/macros/listing"></div-->
+                        <tal:enabled tal:define="enabled python: True">
+                            <div tal:define="
+                                folderContents folderContents|nothing;
+                                enabled enabled|nothing">
+                                <tal:folderContents condition="python: folderContents and enabled" tal:define="batch folderContents">
+                                    <tal:images tal:repeat="brain folderContents">
+                                        <tal:entry tal:define="
+                                            obj brain/getObject;
+                                            obj_title python:obj.pretty_title_or_id();
+                                            desc_or_title python:brain.Description or obj_title;
+                                            item_thumb brain/thumbnail |string:no location;">
+                                            <div tal:define="css python:obj.isPrincipiaFolderish and 'photoAlbumEntry photoAlbumFolder' or 'photoAlbumEntry';"
+                                                tal:attributes="class css">
+
+                                                <a tal:attributes="href obj/absolute_url;
+                                                                   title obj/pretty_title_or_id;
+                                                                   class python:'video-fancybox cloudvideo'">
+                                                    <span class="photoAlbumEntryWrapper">
+                                                        <img tal:attributes="title desc_or_title;
+                                                            alt obj/pretty_title_or_id;
+                                                            src item_thumb"/>
+                                                    </span>
+                                                    <span class="photoAlbumEntryTitle" tal:content="obj/pretty_title_or_id" />
+                                                    <!--span class="photoAlbumEntryDescription" tal:content="python: obj.Description()" /-->
+                                                </a>
+                                            </div>
+                                        </tal:entry>
+                                </tal:images>
+                                <div class="visualClear"></div>
+          ‪                  </tal:folderContents>
+                        </div>
+                    </tal:enabled>
+                </div>
+<!--- end of gallery album-->
+
+        <div class="gallery-listing">
+            <!--div metal:use-macro="here/folder_summary_view/macros/listing"></div-->
+
+                        <tal:enabled tal:define="enabled python: True">
+                            <div tal:define="
+                                folderContents folderContents|nothing;
+                                enabled enabled|nothing">
+                                <tal:folderContents condition="python: folderContents and enabled" tal:define="batch folderContents">
+                                    <tal:entry tal:repeat="item python:folderContents[0:len(folderContents)/2]">
+                        <tal:block
+                       tal:define="
+                                   item_object item/getObject;
+                                   item_absolute_url item_object/absolute_url;
+                                   item_title_or_id python:item.pretty_title_or_id(); 
+                                   item_description item/Description;
+                                   item_type item/portal_type;
+                                   item_type_title item/Type;
+                                   item_published item/EffectiveDate;
+                                   item_modified item/ModificationDate;
+                                   item_thumb item/thumbnail;">
+               <div class="tileItem visualIEFloatFix">
+                    <a class="tileImage"
+                       tal:attributes="href item_absolute_url;
+                                       title item_title_or_id;
+                                       class python:'video-fancybox cloudvideo'">
+                        <!--img tal:attributes="src string:${item_absolute_url}/image_thumb;
+                                             title item_title_or_id;
+                                             alt item_title_or_id" /-->
+                        <img tal:attributes="src item_thumb;
+                                             title item_title_or_id;
+                                             alt item_title_or_id" />
+                    </a>
+
+                    <div class="tileContent">
+                        <h2 class="tileHeadline">
+                            <a href="#"
+                               class="summary url"
+                               tal:attributes="href item_absolute_url;
+                                title item_title_or_id;
+                                class python:'video-fancybox cloudvideo'"
+                               tal:content="item_title_or_id">
+                                Item Title
+                            </a>
+
+                        </h2>
+
+                        <span class="date"
+                              tal:condition="python:item_published != 'None'">
+                            <span tal:replace="python:toLocalizedTime(item_published)">
+                                August 16, 2001 at 23:35:59
+                            </span>
+                        </span>
+
+                    <p class="tileBody" tal:condition="item_description">
+                        <span class="description" tal:content="item_description">
+                            description
+                        </span>
+                    </p>
+
+                    <p class="tileFooter">
+                        <a href="" class="moreLink video-fancybox cloudvideo"
+                           tal:attributes="href string:${item_absolute_url}/video_popup_view"
+                           i18n:translate="">
+                        Zoom in
+                        </a>
+                    </p>
+                    <div class="visualClear" style="padding-bottom:1.0em;"><!-- --></div>
+
+                </div>
+<!--end of gallery listing-->
+
+                                 </tal:block>
+                                </tal:entry>
+                                <div class="visualClear"></div>
+                            </tal:folderContents>
+                        </div>
+                    </tal:enabled>
+
+        </div>
+
+
+
+            </div>
+    </tal:cond>
+    <tal:nocond tal:condition="not:folderContents">
+    <div style="display:none" tal:content="string:plone: XXX this is a workaround, somehow the first div from this folder gets it's content removed"></div>
+        <div class='portalMessage informationMessage'>
+            <p i18n:translate="" class='js-no-results'>No results are available for this topic</p>
+        </div>
+    </tal:nocond>
+</div>
+</tal:folderContents>
+
+        </div>
+    <div class="portletFooter"
+    tal:define="more_href more_href|string:/;
+                more_title more_title|string:Enter Gallery">
+                <p>
+		   <a title="archive" class="standardButton" i18n:attributes="title" 
+                       tal:attributes="href more_href;" >
+				<span i18n:translate=""
+                                      tal:omit-tag="">
+                                    <tal:block tal:content="more_title">Enter Gallery</tal:block></span>
+                    </a>
+                </p>
+</div>
+</div>
+
+    </div>
+<!--end of video highlights -->
+
+
+    </div>
+    </dd>
+
+</dl>
+</html>

@@ -1,0 +1,6 @@
+<tal:multimedia metal:define-macro="latest" 
+        tal:define="frontpage_view context/@@multimedia_logic;
+                    folderContents frontpage_view/getLatestMultimedia;
+                    ajax python:True">
+        <div metal:use-macro="here/eea_multimedia_macros/macros/gallery-condition" />
+</tal:multimedia>

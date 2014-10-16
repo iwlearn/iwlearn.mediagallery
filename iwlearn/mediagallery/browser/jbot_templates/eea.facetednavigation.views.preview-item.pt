@@ -1,0 +1,105 @@
+<div class="photoAlbumEntry"
+  tal:define="portal_type context/portal_type;
+              useViewTypes context/portal_properties/site_properties/typesUseViewActionInListings;
+              useView python:portal_type in useViewTypes;">
+
+<span tal:define="
+      item_type context/Type;
+      description context/Description|string:;
+      title context/pretty_title_or_id|string:;
+      desc_or_title python:description or title;
+      url context/absolute_url|string:#;
+      video_url python:url + '/video_popup_view';
+      view_url python:(url and useView and url + '/view') or url;
+      image_thumb exists:context/image_thumb;
+      video_thumb exists:context/@@embeddedvideo/thumbnail;
+      image_tag python:getattr(context, 'tag', None)">
+
+<div  tal:condition="python:item_type == 'Link'">
+  <a
+     tal:attributes="href video_url;
+                     title description"
+                     class="video-fancybox cloudvideo">
+    <span class="photoAlbumEntryWrapper" tal:condition="image_thumb">
+      <img style="border: none" tal:attributes="
+        title desc_or_title;
+        alt title;
+        src string:$url/image_thumb"/>
+    </span>
+
+    <span class="photoAlbumEntryWrapper videos" tal:condition="video_thumb">
+      <img style="border: none" tal:attributes="
+        title desc_or_title;
+        alt title;
+        src context/@@embeddedvideo/thumbnail"/>
+    </span>
+
+    <span class="photoAlbumEntryWrapper" tal:condition="python:not image_thumb and image_tag and video_thumb">
+      <img tal:replace="structure python:image_tag(scale='thumb', title=description)" />
+    </span>
+
+    <span class="photoAlbumEntryTitle" tal:content="context/pretty_title_or_id|string:">Title</span>
+  </a>
+</div>
+
+
+<div tal:condition="python:item_type == 'Image'">
+  <a tal:attributes="href url;
+                     title description"
+                     class="video-fancybox cloudvideo">
+
+
+    <span class="photoAlbumEntryWrapper" tal:condition="image_thumb">
+      <img style="border: none" tal:attributes="
+        title desc_or_title;
+        alt title;
+        src string:$url/image_thumb"/>
+    </span>
+
+    <span class="photoAlbumEntryWrapper videos" tal:condition="video_thumb">
+      <img style="border: none" tal:attributes="
+        title desc_or_title;
+        alt title;
+        src context/@@embeddedvideo/thumbnail"/>
+    </span>
+
+    <span class="photoAlbumEntryWrapper" tal:condition="python:not image_thumb and image_tag and video_thumb">
+      <img tal:replace="structure python:image_tag(scale='thumb', title=description)" />
+    </span>
+
+    <span class="photoAlbumEntryTitle" tal:content="context/pretty_title_or_id|string:">Title</span>
+
+  </a>
+</div>
+
+
+<div tal:condition="python:item_type != 'Image' and item_type != 'Link'">
+  <a tal:attributes="href view_url;
+                     title description">
+
+
+    <span class="photoAlbumEntryWrapper" tal:condition="image_thumb">
+      <img style="border: none" tal:attributes="
+        title desc_or_title;
+        alt title;
+        src string:$url/image_thumb"/>
+    </span>
+
+    <span class="photoAlbumEntryWrapper videos" tal:condition="video_thumb">
+      <img style="border: none" tal:attributes="
+        title desc_or_title;
+        alt title;
+        src context/@@embeddedvideo/thumbnail"/>
+    </span>
+
+    <span class="photoAlbumEntryWrapper" tal:condition="python:not image_thumb and image_tag and video_thumb">
+      <img tal:replace="structure python:image_tag(scale='thumb', title=description)" />
+    </span>
+
+    <span class="photoAlbumEntryTitle" tal:content="context/pretty_title_or_id|string:">Title</span>
+
+  </a>
+</div>
+
+</span>
+</div>

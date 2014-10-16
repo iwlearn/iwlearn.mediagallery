@@ -1,0 +1,40 @@
+<metal:block metal:define-macro="image_listed_video" 
+   i18n:domain="iwlearn.mediagallery">
+<div class="media-item"
+     tal:define="image image|options/image;
+                 viewurl string:${image/url};
+                 previewurl string:${image/preview_url};
+                 oddeven oddeven|image/oddeven|string:;"
+     tal:attributes="class string:media-item $oddeven">
+
+    <div class="item-left">
+        <dl>
+            <dt class="album-art" i18n:translate="">Album Art:</dt>
+                <dd class="album-art">
+                  <a href="" tal:attributes="href string:$viewurl">
+                      <img tal:attributes="src image/preview_url"
+                           alt="Video Album Art"
+                           i18n:attributes="alt" />
+                  </a>
+                </dd>
+                <dt class="type-image" i18n:translate="">Type:</dt>
+                <dd class="type-image" tal:content="image/media_types">Media type</dd>
+        </dl>
+        <div class="visualClear"><!-- --></div>
+    </div>
+    <div class="item-content">
+        <h2 class="item-title">
+            <a tal:content="image/title"
+               tal:attributes="href viewurl">Image Title</a>
+        </h2>
+
+        <p class="item-description">
+            <span tal:replace="image/description"></span>
+            &nbsp;&nbsp;<a href=""
+                           tal:attributes="href viewurl"
+                           i18n:translate="">More</a>
+        </p>
+    </div>
+    <div class="visualClear"><!-- &nbsp; --></div>
+</div>
+</metal:block>

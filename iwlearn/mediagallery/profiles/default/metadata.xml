@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<metadata>
+ <description>IWLearn Media Gallery profile</description>
+ <version>5.6</version>
+   <dependencies>
+        <dependency>profile-Products.ATVocabularyManager:default</dependency>
+        <dependency>profile-eea.jquery:02-ui</dependency>
+        <dependency>profile-eea.jquery:06-fancybox</dependency>
+        <dependency>profile-eea.jquery:08-galleryview</dependency>
+    </dependencies>
+</metadata>

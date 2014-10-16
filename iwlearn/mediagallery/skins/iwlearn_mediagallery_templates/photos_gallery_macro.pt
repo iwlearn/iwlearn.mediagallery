@@ -1,0 +1,157 @@
+<!--Photo highlights-->
+
+<div id="photo-highlights"
+     class="iwlearn-tabs-panel"
+     tal:define="hide_listing python: False;
+                 hide_album python: True;
+                 more_href string:photos;">
+    <div class="gallery-ajax visualClear">
+        <div tal:define="view context/@@gallery_highlights;
+                                      folderContents view/getPhotos;
+                                      plone_view nocall:plone_view|context/@@plone;
+                                      toLocalizedTime nocall: context/@@plone/toLocalizedTime;
+                                      ajax python:True">
+
+            <tal:folderContents condition="folderContents">
+            <div>
+                <tal:cond tal:condition="folderContents"
+                    tal:define="ajax ajax|nothing;
+                    limit_display limit_display|nothing;">
+                <div>
+                    <div class="gallery-album" style="display: block;">
+                        <tal:enabled tal:define="enabled python: True">
+                            <div tal:define="
+                                folderContents folderContents|nothing;
+                                enabled enabled|nothing">
+                                <tal:folderContents condition="python: folderContents and enabled" tal:define="batch folderContents">
+                                    <tal:images tal:repeat="brain folderContents">
+                                        <tal:entry tal:define="
+                                            obj brain/getObject;
+                                            obj_title python:obj.pretty_title_or_id();
+                                            desc_or_title python:brain.Description or obj_title;">
+                                            <div tal:define="css python:obj.isPrincipiaFolderish and 'photoAlbumEntry photoAlbumFolder' or 'photoAlbumEntry';"
+                                                tal:attributes="class css">
+
+                                                <a tal:attributes="href obj/absolute_url;
+                                                                   title obj/pretty_title_or_id;
+                                                                   class python:'fancyzoom-gallery'">
+                                                    <span class="photoAlbumEntryWrapper">
+                                                        <img tal:attributes="title desc_or_title;
+                                                            alt obj/pretty_title_or_id;
+                                                            src string:${obj/absolute_url}/image_thumb"/>
+                                                    </span>
+                                                    <span class="photoAlbumEntryTitle" tal:content="obj/pretty_title_or_id" />
+                                                    <span class="photoAlbumEntryDescription" tal:content="python: obj.Description()" />
+                                                </a>
+                                            </div>
+                                        </tal:entry>
+                                </tal:images>
+                                <div class="visualClear"></div>
+                            </tal:folderContents>
+                        </div>
+                    </tal:enabled>
+                </div>
+
+        <div class="gallery-listing">
+
+                        <tal:enabled tal:define="enabled python: True">
+                            <div tal:define="
+                                folderContents folderContents|nothing;
+                                enabled enabled|nothing">
+                                <tal:folderContents condition="python: folderContents and enabled" tal:define="batch folderContents">
+                                    <tal:entry tal:repeat="item folderContents">
+                        <tal:block
+                       tal:define="
+                                   item_object item/getObject;
+                                   item_absolute_url item_object/absolute_url;
+                                   item_title_or_id python:item.pretty_title_or_id(); 
+                                   item_description item/Description;
+                                   item_type item/portal_type;
+                                   item_type_title item/Type;
+                                   item_published item/EffectiveDate;
+                                   item_modified item/ModificationDate">
+               <div class="tileItem visualIEFloatFix">
+                    <a class="tileImage"
+                       tal:attributes="href item_absolute_url;
+                                       title item_title_or_id">
+                        <img tal:attributes="src string:${item_absolute_url}/image_thumb;
+                                             title item_title_or_id;
+                                             alt item_title_or_id" />
+                    </a>
+
+                    <div class="tileContent">
+                        <h2 class="tileHeadline">
+                            <a href="#"
+                               class="summary url"
+                               tal:attributes="href item_absolute_url;
+                                title item_title_or_id"
+                               tal:content="item_title_or_id">
+                                Item Title
+                            </a>
+
+                        </h2>
+
+                        <span class="date"
+                              tal:condition="python:item_published != 'None'">
+                            <span tal:replace="python:toLocalizedTime(item_published)">
+                                August 16, 2001 at 23:35:59
+                            </span>
+                        </span>
+
+                    <p class="tileBody" tal:condition="item_description">
+                        <span class="description" tal:content="item_description">
+                            description
+                        </span>
+                    </p>
+
+                    <p class="tileFooter">
+                        <a href="" class="moreLink"
+                           tal:attributes="href item_absolute_url"
+                           i18n:translate="">
+                        Read more
+                        </a>
+                    </p>
+                    <div class="visualClear" style="padding-bottom:1.0em;"><!-- --></div>
+
+                </div>
+
+                                 </tal:block>
+                                </tal:entry>
+                                <div class="visualClear"></div>
+                            </tal:folderContents>
+                        </div>
+                    </tal:enabled>
+
+        </div>
+<!--end of gallery listing-->
+
+            </div>
+    </tal:cond>
+    <tal:nocond tal:condition="not:folderContents">
+    <div style="display:none" tal:content="string:plone: XXX this is a workaround, somehow the first div from this folder gets it's content removed"></div>
+        <div class='portalMessage informationMessage'>
+            <p i18n:translate="" class='js-no-results'>No results are available for this topic</p>
+        </div>
+    </tal:nocond>
+</div>
+</tal:folderContents>
+
+
+
+        </div>
+    <div class="portletFooter"
+    tal:define="more_href more_href|string:/;
+                more_title more_title|string:All Items">
+                <p>
+		   <a title="archive" class="standardButton" i18n:attributes="title" 
+                       tal:attributes="href more_href;" >
+				<span i18n:translate=""
+                                      tal:omit-tag="">
+                                    <tal:block tal:content="more_title">All Items</tal:block></span>
+                    </a>
+                </p>
+</div>
+
+</div>
+</div>
+
